@@ -1,0 +1,29 @@
+const Currency = require("../models/Currency");
+
+exports.default = (req, res) => {
+  console.log("Connected to React");
+  res.redirect("/");
+}
+
+exports.home = (req, res) => {
+  res.send("welcome");
+}
+
+
+exports.getList = (req, res) => {
+  Currency.queryList(req).then(response => {
+    res.send(response);
+  });
+};
+
+exports.getCurrentRates = (req, res) => {
+  Currency.queryCurrentRates(req).then(response => {
+    res.send(response);
+  });
+};
+
+exports.getHistoricalRates = (req, res) => {
+  Currency.queryHistoricalRates(req).then(response => {
+    res.send(response);
+  });
+};

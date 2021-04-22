@@ -1,0 +1,28 @@
+{
+  "name": "maltem-fs",
+  "version": "1.0.0",
+  "description": "currency",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha",
+    "server": "nodemon app.js",
+    "client": "cd fe && npm start",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "chai": "^4.3.4",
+    "concurrently": "^6.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mocha": "^8.3.2",
+    "moment": "^2.29.1",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.3"
+  }
+}

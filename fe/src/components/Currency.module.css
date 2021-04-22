@@ -1,0 +1,32 @@
+.currency {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px black;
+  padding: 20px;
+  width: 700px;
+  height: 160px;
+  margin: 16px;
+  float: left;
+  z-index: 1;
+}
+
+.currency:hover{
+  background-color: grey;
+  opacity: 0.9;
+  cursor: pointer;
+}
+
+.name {
+  float: left;
+}
+
+.rate {
+  bottom: 80px;
+  float: right;
+  position: relative;
+
+}
+
+.code{
+  color: #722F37;
+}

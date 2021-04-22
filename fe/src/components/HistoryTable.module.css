@@ -1,0 +1,66 @@
+.historyTable {
+  color: #722F37;
+  height: 50px;
+  text-align: center;
+  font-weight: bold;
+  width: 1000px;
+}
+
+
+.historyTable table {
+  border: 1px solid black;
+
+  margin: 16px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.historyTable th {
+  border: 1px solid black;
+}
+
+.day th:hover {
+  background-color: grey;
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.historyTable td {
+  height: 50px;
+  border: 1px solid black;
+  background-color: white;
+}
+
+.header {
+  color:  #722F37;
+  font-size: 40px;
+  height: 50px;
+  text-align: left;
+  margin: 20px;
+}
+
+.historyTable p {
+  color:  #722F37;
+  font-size: 20px;
+  text-align: left;
+  margin: 20px;
+  font-weight: normal;
+}
+
+.historyTable button {
+  background-color: #999999;
+  border-radius: 5px;
+  font-size: 20px;
+  padding: 12px;
+  color:  #722F37;;
+  width: 15%;
+  font-weight: bold;
+  float:left;
+  margin: 20px;
+  cursor: pointer;
+}
+
+.historyTable button:hover {
+  background-color: #111111;
+  opacity: 0.7;
+}

@@ -1,0 +1,45 @@
+.App {
+  background-color: white;
+  height: 100%;
+
+}
+
+.App th {
+  text-align: center;
+  height: 50px;
+  width: 700px;
+  background-color: white;
+}
+
+.App td {
+  text-align: center;
+}
+
+
+.loader {
+  position: absolute;
+  left: 50%;
+  top: 20%;
+}
+
+.error {
+  text-align: center;
+  font-size: 50px;
+  font-weight: bold;
+  color: #722F37;
+}
+
+.App button{
+  background-color: #942337;
+  color: white;
+  font-size: 20px;
+  padding: 16px 20px;
+  width: 10%;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.App button:hover {
+  background-color: green;
+  opacity: 0.7;
+}
