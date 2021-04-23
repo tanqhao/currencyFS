@@ -12,7 +12,6 @@ http://localhost:8080/query/list
 - get the list of currencies info (currency name, currency code and country)
 
 
-
 http://localhost:8080/query/currentRates/?
 - get the latest list of rates for the base currency
 parameters
@@ -26,5 +25,9 @@ parameters
 base - the base currency code
 symbols - what currencies to compare with (eg. symbols=USD,AUD )
 date - the date to query (eg date=2021-04-03)
+
+use "npm test" to run the tests for the API endpoints
+
+
 
 
