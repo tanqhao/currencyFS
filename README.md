@@ -1,7 +1,9 @@
 # currencyFS
 **How to run**
-After installing the node modules, set the API_Key in the .env from (https://currencyscoop.com/) 
-use "npm run dev" to start the fe and be.
+1. Install the node modules for the be at the main folder. 
+2. Install the node modules for fhe be at the main/fe folder.
+3. Set the API_Key for the be in the .env from (https://currencyscoop.com/) 
+4. use "npm run dev" to start the fe and be.
 
 BE port = 8080;
 FE port = 3000;
