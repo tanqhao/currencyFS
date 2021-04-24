@@ -93,7 +93,8 @@ let today = new Date();
 const getHistoryRates = base => {
   let history = [];
   let promises = [];
-  for (let days = 0; days <= 7; days++) {
+  for(let days = 0; days <= 7; days++)
+  {
     let date = new Date();;
     date.setDate(today.getDate() - days);
     date = date.toISOString().slice(0, 10);
