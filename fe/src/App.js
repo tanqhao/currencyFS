@@ -26,57 +26,64 @@ const[loading, setLoading] = useState(false);
 const[errorMsg, setErrorMsg] = useState(undefined);
 
 // on first load
-useEffect(()=> {
-// get localstorage base currency
-let base;
-if(localStorage.getItem('base') !== null) {
-  base = localStorage.getItem('base');
-}
-else {
-  base = "SGD";
-}
+useEffect(() => {
+  // get localstorage base currency
+  let base;
+  if (localStorage.getItem('base') !== null) {
+    base = localStorage.getItem('base');
+  } else {
+    base = "SGD";
+  }
 
-setBaseCurrency(base);
-setLoading(true);
+  setBaseCurrency(base);
+  setLoading(true);
 
-// fetch currency data from server
-getDataFromServer(base);
-
+  // fetch currency data from server
+  getDataFromServer(base);
 }, []);
+
+
+const isErrorInResponse = res => {
+  if (res.data.hasOwnProperty("code")) {
+    setErrorMsg(`${res.data.code}  ${res.data.error_type}`)
+    return true;
+  }
+  return false;
+}
 
 const getDataFromServer = base => {
 
   axios.get(`http://localhost:${process.env.REACT_APP_PORT}/query/currentRates/?base=${base}`)
-     .then(res => {
-       const info = res.data.rates;
-       setRatesInfo(info);
-       setLoading(false);
-     })
-     .catch((error) => {
-       if(!error.response) {
-         setErrorMsg("Network error");
-       }
-        else
-        {
-          setErrorMsg(`${error.response.status}  ${error.response.headers}`)
-        }
-     });
+    .then(res => {
+      if (!isErrorInResponse(res)) {
+        const info = res.data.rates;
+        setRatesInfo(info);
+        setLoading(false);
+      }
+    })
+    .catch((error) => {
+      if (!error.response) {
+        setErrorMsg("Network error");
+      } else {
+        setErrorMsg(`${error.response.status}  ${error.response.statusText}`)
+      }
+    });
 
-     //fetch currencies infos (name and code)
-     axios.get(`http://localhost:${process.env.REACT_APP_PORT}/query/list`)
-        .then(res => {
-          const info = res.data.fiats;
-          setCurrenciesInfo(info);
-        })
-        .catch((error) => {
-          if(!error.response) {
-            setErrorMsg("Network error");
-          }
-           else
-           {
-             setErrorMsg(`${error.response.status}  ${error.response.headers}`)
-           }
-        });
+  //fetch currencies infos (name and code)
+  axios.get(`http://localhost:${process.env.REACT_APP_PORT}/query/list`)
+    .then(res => {
+      if (!isErrorInResponse(res)) {
+        const info = res.data.fiats;
+        setCurrenciesInfo(info);
+      }
+    })
+    .catch((error) => {
+      if (!error.response) {
+        setErrorMsg("Network error");
+      } else {
+        setErrorMsg(`${error.response.status}  ${error.response.statusText}`)
+      }
+    });
 }
 
 
@@ -86,38 +93,38 @@ let today = new Date();
 const getHistoryRates = base => {
   let history = [];
   let promises = [];
-  for(let days = 0; days <= 7; days++)
-  {
+  for (let days = 0; days <= 7; days++) {
     let date = new Date();;
     date.setDate(today.getDate() - days);
     date = date.toISOString().slice(0, 10);
 
     promises.push(
       axios.get(`http://localhost:${process.env.REACT_APP_PORT}/query/historicalRates/?base=${base}&date=${date}`)
-         .then(res => {
-           history.push(res.data);
+      .then(res => {
+        if (!isErrorInResponse(res)) {
+          history.push(res.data);
+        }
       })
     )
   }
   // process after all history rates request is fulfiled
   Promise.all(promises).then(res => {
-    setRatesHistory(history);
-    setLoading(false);
-    setcurrencyClicked(true);
-  })
-  .catch((error) => {
-    if(!error.response) {
-      setErrorMsg("Network error");
-    }
-     else
-     {
-       setErrorMsg(`${error.response.status}  ${error.response.headers}`)
-     }
-  });
+      setRatesHistory(history);
+      setLoading(false);
+      setcurrencyClicked(true);
+    })
+    .catch((error) => {
+      if (!error.response) {
+        setErrorMsg("Network error");
+      } else {
+        setErrorMsg(`${error.response.status}  ${error.response.statusText}`)
+      }
+    });
 }
 
-const handleClick = (code, name) =>{
+const handleClick = (code, name) => {
   setLoading(true);
+  setErrorMsg(undefined);
   setSelectedCurrency(code);
   setSelectedName(name);
   getHistoryRates(baseCurrency);
@@ -126,38 +133,36 @@ const handleClick = (code, name) =>{
 // base currency changed
 const baseChangedHandler = base => {
 
-  if(base !== baseCurrency) {
+  if (base !== baseCurrency) {
 
     setLoading(true);
     axios.get(`http://localhost:${process.env.REACT_APP_PORT}/query/currentRates/?base=${base}`)
-       .then(res => {
-         const info = res.data.rates;
-         setRatesInfo(info);
-
-         // update history info if inside history page
-         if(currencyClicked)
-         {
-           getHistoryRates(base);
-         }
-          setLoading(false);
-       })
-       .catch((error) => {
-         if(!error.response) {
-           setErrorMsg("Network error");
-         }
-          else
-          {
-            setErrorMsg(`${error.response.status}  ${error.response.headers}`)
-          }
-       });
-       setBaseCurrency(base);
-       localStorage.setItem('base', base);
-   }
+      .then(res => {
+        if (!isErrorInResponse(res)) {
+          const info = res.data.rates;
+          setRatesInfo(info);
+        }
+        // update history info if inside history page
+        if (currencyClicked) {
+          getHistoryRates(base);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        if (!error.response) {
+          setErrorMsg("Network error");
+        } else {
+          setErrorMsg(`${error.response.status}  ${error.response.statusText}`)
+        }
+      });
+    setBaseCurrency(base);
+    localStorage.setItem('base', base);
+  }
 }
 
 // handle retry button
 const retryHandler = () => {
-  getDataFromServer();
+  getDataFromServer(baseCurrency);
   setErrorMsg(undefined);
 }
 
@@ -165,7 +170,6 @@ const retryHandler = () => {
 const backHandler = () => {
   setcurrencyClicked(false);
 }
-
 let content;
 if(errorMsg)
 {
@@ -194,11 +198,14 @@ else if(currencyClicked)
 else
 {
       // content for current currencies rate
-      content = Object.keys(currenciesInfo).map((info, index) => {
-       return <div key={uniqid()} onClick={ () => handleClick(info, currenciesInfo[info].currency_name)}>
-       <Currency code={info} name={currenciesInfo[info].currency_name} rate={ratesInfo[info]}/>
-       </div>
-   });
+      if(currenciesInfo)
+      {
+        content = Object.keys(currenciesInfo).map((info, index) => {
+         return <div key={uniqid()} onClick={ () => handleClick(info, currenciesInfo[info].currency_name)}>
+         <Currency code={info} name={currenciesInfo[info].currency_name} rate={ratesInfo[info]}/>
+         </div>
+        });
+     }
  }
   return (
     <div className={styles.App}>

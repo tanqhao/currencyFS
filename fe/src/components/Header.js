@@ -15,9 +15,13 @@ const [clickState, setClickState] = useState(false);
     props.baseChanged(event.target.innerHTML);
   }
 
-let content = Object.keys(props.info).map((item) => {
-      return <li key={uniqid()}>{item}</li>
-   });
+let content;
+if(props.info)
+{
+   content = Object.keys(props.info).map((item) => {
+        return <li key={uniqid()}>{item}</li>
+     });
+ }
 
 return (
   <div className={styles.Header}>

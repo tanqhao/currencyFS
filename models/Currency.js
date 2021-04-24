@@ -15,9 +15,8 @@ const makeRequest = async (endpoint, parameters) => {
     }
     catch(error)
     {
-      return (`${error.response.status}  ${error.response.headers}`);
+      return (error.response.data.meta);
     }
-
     return res.data.response;
 }
 
@@ -33,7 +32,7 @@ exports.queryList = async (req) => {
   }
   catch(error)
   {
-    return (`${error.response.status}  ${error.response.headers}`);
+    return (error);
   }
 }
 
@@ -63,7 +62,7 @@ exports.queryCurrentRates = async (req) => {
   }
   catch(error)
   {
-    return (`${error.response.status}  ${error.response.headers}`);
+    return (error);
   }
 }
 
@@ -98,6 +97,6 @@ exports.queryHistoricalRates = async (req) => {
     }
     catch(error)
     {
-      return (`${error.response.status}  ${error.response.headers}`);
+      return (error);
     }
   }

@@ -20,10 +20,22 @@ const HistoryTable = (props) =>  {
     props.backHandle();
   }
 
- let content = Object.entries(props.rateHistory).map((item, index) => {
-    let rate = item[1].rates;
-    return <HistoryRates key={uniqid()} date={item[1]["date"]} rate={rate[props.selected]} code={props.selected}/>
-  });
+  let content;
+
+  if(props.rateHistory)
+  {
+    // sort the history dates
+    props.rateHistory.sort((a,b) => {
+        a = a.date.split('-').reverse().join('');
+        b = b.date.split('-').reverse().join('');
+        return a > b ? 1 : a < b ? -1 : 0;
+    });
+
+    content = Object.entries( props.rateHistory).map((item, index) => {
+      let rate = item[1].rates;
+      return <HistoryRates key={uniqid()} date={item[1]["date"]} rate={rate[props.selected]} code={props.selected}/>
+    });
+  }
 
     return (
       <div className={styles.historyTable}>
