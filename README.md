@@ -1,3 +1,4 @@
+
 # currencyFS
 **How to run**
 1. Install the node modules for the be at the main folder. 
@@ -30,6 +31,10 @@ date - the date to query (eg date=2021-04-03)
 
 use "npm test" to run the tests for the API endpoints
 
+![frontPage](https://user-images.githubusercontent.com/76518841/116819114-26902f80-aba1-11eb-816d-8696a036677e.png)
+
+
+![history](https://user-images.githubusercontent.com/76518841/116819150-4aec0c00-aba1-11eb-981c-139ddc572bc3.png)
 
 
 
