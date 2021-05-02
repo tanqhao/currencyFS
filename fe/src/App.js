@@ -147,7 +147,10 @@ const baseChangedHandler = base => {
         if (currencyClicked) {
           getHistoryRates(base);
         }
-        setLoading(false);
+        else
+        {
+          setLoading(false);
+        }
       })
       .catch((error) => {
         if (!error.response) {

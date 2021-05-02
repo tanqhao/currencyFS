@@ -1,27 +1,29 @@
 import styles from './HistoryTable.module.css';
 import uniqid from 'uniqid';
-
+import {Line} from 'react-chartjs-2';
 import {useState} from 'react';
 
 import HistoryRates from './HistoryRates';
+import getSymbolFromCurrency from 'currency-symbol-map';
 
 const HistoryTable = (props) =>  {
 
-  const[history, setHistory] = useState([]);
-  const[itemLoaded, setItemLoaded] = useState(false);
+  const[showChart, setShowChart] = useState(true);
 
-  const handleClick = (days) =>{
-    setItemLoaded(true);
-    setHistory(content.slice(0, days));
-  }
+  const handleClick = (chart) =>{
+    setShowChart(chart);
+}
 
   const backClick = () =>
   {
     props.backHandle();
   }
 
-  let content;
+  let symbol = getSymbolFromCurrency(props.rateHistory[0].base);
 
+  let content, chartData;
+  let rates = [];
+  let dates = [];
   if(props.rateHistory)
   {
     // sort the history dates
@@ -33,10 +35,24 @@ const HistoryTable = (props) =>  {
 
     content = Object.entries( props.rateHistory).map((item, index) => {
       let rate = item[1].rates;
+      rates.push(rate[props.selected]);
+      dates.push(item[1]["date"]);
       return <HistoryRates key={uniqid()} date={item[1]["date"]} rate={rate[props.selected]} code={props.selected}/>
     });
-  }
 
+    chartData = {
+    labels: dates,
+    datasets: [
+      {
+        label: `${symbol}1 ${props.rateHistory[0].base}`,
+        data: rates,
+        fill: true,
+        backgroundColor: "rgba(75,192,192,0.2)",
+        borderColor: "rgba(75,192,192,1)"
+        },
+      ]
+    };
+  }
     return (
       <div className={styles.historyTable}>
       <div className={styles.header}>
@@ -46,21 +62,22 @@ const HistoryTable = (props) =>  {
       <table className={styles.day}>
       <tbody>
       <tr>
-      <th onClick={ () => handleClick(1)}>Today</th>
-      <th onClick={ () => handleClick(4)}>Last 3 days</th>
-      <th onClick={ () => handleClick(8)}>Last 7 days</th>
+      <th onClick={ () => handleClick(true)}>Line</th>
+      <th onClick={ () => handleClick(false)}>Table</th>
       </tr>
       </tbody>
       </table>
-      <table>
+      {showChart ? (<Line data={chartData}/>) : (
+        <table>
       <tbody>
       <tr>
        <th>Dates</th>
        <th>Exchange Rate</th>
        </tr>
        </tbody>
-       {itemLoaded ? history :content}
-       </table>
+       {content}
+       </table>)
+      }
        <button type="button" onClick={backClick}>
         Back
         </button>

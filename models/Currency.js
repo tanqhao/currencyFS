@@ -2,6 +2,10 @@
 const axios = require("axios");
 const moment = require("moment");
 
+const NodeCache = require('node-cache');
+
+const myCache = new NodeCache();
+
 const makeRequest = async (endpoint, parameters) => {
     const config = {
         method: 'get',
@@ -23,16 +27,27 @@ const makeRequest = async (endpoint, parameters) => {
 
 exports.queryList = async (req) => {
 
-  let type = "fiat";
+  let res;
 
-  try
-  {
-    let res = await makeRequest("currencies", `type=${type}`);
+  if (myCache.has("list")) {
+    res = myCache.get("list");
+    console.log("list data in cache");
     return res;
   }
-  catch(error)
+  else
   {
-    return (error);
+    let type = "fiat";
+    try
+    {
+      res = await makeRequest("currencies", `type=${type}`);
+      myCache.set('list', res);
+
+      return res;
+    }
+    catch(error)
+    {
+      return (error);
+    }
   }
 }
 
@@ -82,21 +97,32 @@ exports.queryHistoricalRates = async (req) => {
       base = "SGD";
     }
 
-    try
-    {
-      if(symbols === undefined)
-      {
-          let res = await makeRequest("historical", `base=${base}&date=${date}`);
-          return res;
-      }
-      else
-      {
-          let res = await makeRequest("historical", `base=${base}&date=${date}&symbols=${symbols}`);
-          return res;
-      }
+    let cacheKey = `${date}:${base}`;
+
+    if (myCache.has(cacheKey)) {
+      res = myCache.get(cacheKey);
+      console.log("history data in cache" + cacheKey);
+      return res;
     }
-    catch(error)
+    else
     {
-      return (error);
+      try
+      {
+        if(symbols === undefined)
+        {
+            let res = await makeRequest("historical", `base=${base}&date=${date}`);
+            myCache.set(cacheKey, res);
+            return res;
+        }
+        else
+        {
+            let res = await makeRequest("historical", `base=${base}&date=${date}&symbols=${symbols}`);
+            return res;
+        }
+      }
+      catch(error)
+      {
+        return (error);
+      }
     }
   }
